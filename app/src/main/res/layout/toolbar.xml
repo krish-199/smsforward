@@ -33,6 +33,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+                android:id="@+id/ivBlacklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/description_blacklist_button"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:src="@drawable/ic_regex_24dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/ivHelp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
+
+        <ImageView
                 android:id="@+id/ivHelp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

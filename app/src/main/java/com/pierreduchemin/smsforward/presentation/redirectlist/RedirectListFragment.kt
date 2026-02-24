@@ -62,6 +62,7 @@ class RedirectListFragment : Fragment() {
                 .show()
         }
         ui.toolbar.ivHelp.isVisible = true
+        ui.toolbar.ivBlacklist.isVisible = true
 
         val fabAction: (v: View) -> Unit = {
             startAddRedirect()
@@ -83,6 +84,9 @@ class RedirectListFragment : Fragment() {
         ui.toolbar.ivHelp.setOnClickListener {
             startAbout()
         }
+        ui.toolbar.ivBlacklist.setOnClickListener {
+            startBlacklist()
+        }
     }
 
     private fun startAddRedirect() {
@@ -91,6 +95,10 @@ class RedirectListFragment : Fragment() {
 
     private fun startAbout() {
         findNavController().navigate(R.id.action_redirectListFragment_to_aboutActivity)
+    }
+
+    private fun startBlacklist() {
+        findNavController().navigate(R.id.action_redirectListFragment_to_blacklistFragment)
     }
 
     private fun setSwitchState(switchState: SwitchState) {

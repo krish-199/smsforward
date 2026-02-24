@@ -19,9 +19,27 @@ class RedirectionManager @Inject constructor(
     }
 
     fun onSmsReceived(context: Context, phoneNumberFrom: String, message: String) {
-        if (!isRedirectionActivated()) {
+        val globalModel = globalModelRepository.getGlobalModel()
+        val activated = globalModel?.activated ?: true
+        if (!activated) {
             Log.i(TAG, "Redirection not activated")
             return
+        }
+
+        if (globalModel != null && globalModel.blacklist.isNotBlank()) {
+            val blacklistedWords = globalModel.blacklist.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+            if (blacklistedWords.isNotEmpty()) {
+                val patternString = blacklistedWords.joinToString("|") { "($it)" }
+                try {
+                    val pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE)
+                    if (pattern.matcher(message).find()) {
+                        Log.i(TAG, "Message matches blacklist pattern, skipping all forwarding.")
+                        return
+                    }
+                } catch (e: PatternSyntaxException) {
+                    Log.e(TAG, "Invalid blacklist pattern: $patternString")
+                }
+            }
         }
 
         val forwardModels = forwardModelRepository.getForwardModels()
