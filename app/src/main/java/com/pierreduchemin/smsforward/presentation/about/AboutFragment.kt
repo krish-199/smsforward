@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.pierreduchemin.smsforward.BuildConfig
 import com.pierreduchemin.smsforward.R
@@ -35,6 +38,16 @@ class AboutFragment : Fragment() {
         loadAbout()
 
         return ui.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        ViewCompat.setOnApplyWindowInsetsListener(ui.root) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top, bottom = insets.bottom, left = insets.left, right = insets.right)
+            windowInsets
+        }
     }
 
     private fun setupToolbar() {
