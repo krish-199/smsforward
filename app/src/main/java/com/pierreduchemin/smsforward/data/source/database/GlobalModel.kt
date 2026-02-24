@@ -15,4 +15,7 @@ data class GlobalModel(
 
     @ColumnInfo
     var advancedMode: Boolean = false,
+
+    @ColumnInfo
+    var forwardCount: Int = 0,
 )

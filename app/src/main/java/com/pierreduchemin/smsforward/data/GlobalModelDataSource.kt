@@ -10,4 +10,6 @@ interface GlobalModelDataSource {
     fun countGlobalModel(): LiveData<Long>
     fun updateGlobalModel(globalModel: GlobalModel)
     fun insertGlobalModel(globalModel: GlobalModel)
+    fun resetForwardCount()
+    fun incrementForwardCount()
 }

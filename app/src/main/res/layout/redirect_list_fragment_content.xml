@@ -7,15 +7,26 @@
         android:layout_height="match_parent"
         tools:context=".presentation.redirectlist.RedirectListFragment">
 
+    <TextView
+            android:id="@+id/tvTotalForwarded"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Total forwarded: 10" />
+
     <ImageView
             android:id="@+id/ivSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:contentDescription="@string/description_send_sms_illustration"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalForwarded"
             app:srcCompat="@drawable/img_undraw_mailbox" />
 
     <androidx.recyclerview.widget.RecyclerView

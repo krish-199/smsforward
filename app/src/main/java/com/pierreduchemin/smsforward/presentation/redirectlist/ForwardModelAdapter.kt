@@ -28,6 +28,10 @@ class ForwardModelAdapter(
         val item = values[position]
         holder.tvFrom.text = item.vfrom
         holder.tvTo.text = item.vto
+        holder.tvRuleCount.text = holder.itemView.context.getString(
+            com.pierreduchemin.smsforward.R.string.redirectlist_rule_forwarded,
+            item.forwardCount
+        )
 
         with(holder.ivDelete) {
             tag = item
@@ -49,6 +53,7 @@ class ForwardModelAdapter(
         val tvFrom: TextView = ui.tvFrom
         val tvTo: TextView = ui.tvTo
         val ivDelete: ImageView = ui.ivDelete
+        val tvRuleCount: TextView = ui.tvRuleCount
 
         override fun toString(): String {
             return super.toString() + " '" + tvTo.text + "'"

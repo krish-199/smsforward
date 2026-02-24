@@ -30,6 +30,7 @@ class AppModule {
                 "smsforward_database"
             )
                 .allowMainThreadQueries()
+                .addMigrations(SMSForwardDatabase.MIGRATION_4_5)
                 .fallbackToDestructiveMigration()
                 .build()
         }

@@ -27,4 +27,7 @@ data class ForwardModel(
 
     @ColumnInfo
     var isRegex: Boolean = false,
+
+    @ColumnInfo
+    var forwardCount: Int = 0,
 )

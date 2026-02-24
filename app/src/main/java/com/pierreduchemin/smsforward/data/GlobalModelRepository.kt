@@ -21,4 +21,12 @@ class GlobalModelRepository(private val globalModelDao: GlobalModelDao) : Global
     override fun insertGlobalModel(globalModel: GlobalModel) {
         globalModelDao.insertGlobalModel(globalModel)
     }
+
+    override fun resetForwardCount() {
+        globalModelDao.resetForwardCount()
+    }
+
+    override fun incrementForwardCount() {
+        globalModelDao.incrementForwardCount()
+    }
 }

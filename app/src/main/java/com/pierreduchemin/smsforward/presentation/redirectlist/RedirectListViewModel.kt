@@ -28,6 +28,7 @@ class RedirectListViewModel @Inject constructor(
 
     val ldForwardsList = MutableLiveData<List<ForwardModel>>()
     val ldButtonState = MutableLiveData<RedirectListFragment.SwitchState>()
+    val ldGlobalModel = globalModelRepository.observeGlobalModel()
 
     private var forwardModels: List<ForwardModel> = arrayListOf()
     private var globalModel: GlobalModel? = null
@@ -67,6 +68,8 @@ class RedirectListViewModel @Inject constructor(
             ldButtonState.value = RedirectListFragment.SwitchState.Stopped
             viewModelScope.launch(Dispatchers.IO) {
                 globalModelRepository.updateGlobalModel(localGlobalModel)
+                globalModelRepository.resetForwardCount()
+                forwardModelRepository.resetForwardCount()
             }
         } else {
             localGlobalModel.activated = true

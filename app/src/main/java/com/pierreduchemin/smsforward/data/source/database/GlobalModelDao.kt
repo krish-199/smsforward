@@ -27,4 +27,10 @@ interface GlobalModelDao {
 
     @Update
     fun updateGlobalModel(globalModel: GlobalModel)
+
+    @Query("UPDATE GlobalModel SET forwardCount = 0 WHERE id = 1")
+    fun resetForwardCount()
+
+    @Query("UPDATE GlobalModel SET forwardCount = forwardCount + 1 WHERE id = 1")
+    fun incrementForwardCount()
 }

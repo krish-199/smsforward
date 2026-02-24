@@ -11,4 +11,6 @@ interface ForwardModelDataSource {
     fun updateForwardModel(forwardModel: ForwardModel)
     fun insertForwardModel(forwardModel: ForwardModel): Long
     fun deleteForwardModelById(id: Long): Int
+    fun resetForwardCount()
+    fun incrementForwardCount(id: Long)
 }

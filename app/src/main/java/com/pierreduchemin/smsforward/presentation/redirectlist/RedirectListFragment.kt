@@ -71,14 +71,18 @@ class RedirectListFragment : Fragment() {
         ui.vfContent.swActivate.setOnClickListener {
             viewModel.onRedirectionToggled()
         }
-        viewModel.ldButtonState.observe(requireActivity()) {
+        viewModel.ldButtonState.observe(viewLifecycleOwner) {
             if (lastSwitchState != it) {
                 lastSwitchState = it
                 setSwitchState(it)
             }
         }
-        viewModel.ldForwardsList.observe(requireActivity()) {
+        viewModel.ldForwardsList.observe(viewLifecycleOwner) {
             setList(it)
+        }
+        viewModel.ldGlobalModel.observe(viewLifecycleOwner) {
+            ui.vfContent.tvTotalForwarded.text =
+                getString(R.string.redirectlist_total_forwarded, it?.forwardCount ?: 0)
         }
         ui.toolbar.ivHelp.setOnClickListener {
             startAbout()

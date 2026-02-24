@@ -80,24 +80,24 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
             askPermission(requiredPermissions)
         } ?: Log.e(TAG, "Not able to ask for permission") // TODO: manage error with error view
 
-        viewModel.buttonState.observe(requireActivity()) {
+        viewModel.buttonState.observe(viewLifecycleOwner) {
             setButtonState(it)
         }
-        viewModel.errorMessageRes.observe(requireActivity()) {
+        viewModel.errorMessageRes.observe(viewLifecycleOwner) {
             showError(it)
         }
-        viewModel.sourceText.observe(requireActivity()) {
+        viewModel.sourceText.observe(viewLifecycleOwner) {
             setSource(it)
         }
-        viewModel.destinationText.observe(requireActivity()) {
+        viewModel.destinationText.observe(viewLifecycleOwner) {
             setDestination(it)
         }
-        viewModel.isComplete.observe(requireActivity()) {
+        viewModel.isComplete.observe(viewLifecycleOwner) {
             if (it) {
                 startRedirectList()
             }
         }
-        viewModel.isAdvancedModeEnabled.observe(requireActivity()) {
+        viewModel.isAdvancedModeEnabled.observe(viewLifecycleOwner) {
             if (it) {
                 setAdvancedMode()
             } else {

@@ -5,6 +5,10 @@ import android.util.Log
 import com.pierreduchemin.smsforward.R
 import com.pierreduchemin.smsforward.data.ForwardModelRepository
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import javax.inject.Inject
@@ -13,6 +17,8 @@ class RedirectionManager @Inject constructor(
     private val globalModelRepository: GlobalModelRepository,
     private val forwardModelRepository: ForwardModelRepository
 ) {
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
         private val TAG by lazy { RedirectionManager::class.java.simpleName }
@@ -59,6 +65,13 @@ class RedirectionManager @Inject constructor(
                     message
                 )
             )
+
+            scope.launch {
+                it.id?.let { id ->
+                    forwardModelRepository.incrementForwardCount(id)
+                }
+                globalModelRepository.incrementForwardCount()
+            }
         }
     }
 
