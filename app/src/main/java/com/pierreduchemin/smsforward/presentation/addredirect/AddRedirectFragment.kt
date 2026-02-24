@@ -131,7 +131,9 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
         ui.btnAdd.setOnClickListener {
             viewModel.onButtonClicked(
                 ui.etSource.text.trim().toString(),
-                ui.etDestination.text.trim().toString()
+                ui.etDestination.text.trim().toString(),
+                ui.etContentRegex.text.trim().toString(),
+                ui.etTemplate.text.trim().toString()
             )
         }
         ui.btnAdvancedMode.setOnClickListener {
@@ -184,6 +186,8 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
             ButtonState.Disabled -> {
                 ui.etSource.isEnabled = true
                 ui.etDestination.isEnabled = true
+                ui.etContentRegex.isEnabled = true
+                ui.etTemplate.isEnabled = true
                 ui.btnAdd.isEnabled = false
                 ui.btnAdd.text = getString(R.string.addredirect_info_add)
             }
@@ -191,6 +195,8 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
             ButtonState.Enabled -> {
                 ui.etSource.isEnabled = true
                 ui.etDestination.isEnabled = true
+                ui.etContentRegex.isEnabled = true
+                ui.etTemplate.isEnabled = true
                 ui.btnAdd.isEnabled = true
                 ui.btnAdd.text = getString(R.string.addredirect_info_add)
             }
@@ -208,6 +214,8 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
     override fun resetFields() {
         ui.etSource.setText("", TextView.BufferType.EDITABLE)
         ui.etDestination.setText("", TextView.BufferType.EDITABLE)
+        ui.etContentRegex.setText("", TextView.BufferType.EDITABLE)
+        ui.etTemplate.setText("", TextView.BufferType.EDITABLE)
     }
 
     private fun setNormalMode() {

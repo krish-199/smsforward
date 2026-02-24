@@ -91,6 +91,43 @@
                         android:importantForAutofill="no"
                         android:inputType="phone" />
 
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:labelFor="@id/etContentRegex"
+                        android:text="@string/addredirect_info_content_regex" />
+
+                <EditText
+                        android:id="@+id/etContentRegex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:gravity="center_horizontal"
+                        android:hint="@string/addredirect_info_content_regex_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textNoSuggestions" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:labelFor="@id/etTemplate"
+                        android:text="@string/addredirect_info_template" />
+
+                <EditText
+                        android:id="@+id/etTemplate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:hint="@string/addredirect_info_template_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textNoSuggestions" />
+
                 <Button
                         android:id="@+id/btnAdd"
                         android:layout_width="wrap_content"

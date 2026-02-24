@@ -27,4 +27,10 @@ data class ForwardModel(
 
     @ColumnInfo
     var isRegex: Boolean = false,
+
+    @ColumnInfo
+    var contentRegex: String? = null,
+
+    @ColumnInfo
+    var template: String? = null,
 )

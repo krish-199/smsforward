@@ -87,7 +87,7 @@ class AddRedirectViewModel @Inject constructor() : ViewModel() {
         notifyUpdate()
     }
 
-    fun onButtonClicked(source: String, destination: String) {
+    fun onButtonClicked(source: String, destination: String, contentRegex: String, template: String) {
         val localForwardModel = forwardModel!!
         if (source.isEmpty()) {
             errorMessageRes.value = R.string.addredirect_error_empty_source
@@ -115,6 +115,24 @@ class AddRedirectViewModel @Inject constructor() : ViewModel() {
             forwardModel?.isRegex = true
             forwardModel?.from = source
             forwardModel?.vfrom = source
+        }
+
+        if (contentRegex.isNotBlank()) {
+            try {
+                Pattern.compile(contentRegex)
+                forwardModel?.contentRegex = contentRegex
+            } catch (e: PatternSyntaxException) {
+                errorMessageRes.value = R.string.addredirect_error_invalid_regex
+                return
+            }
+        } else {
+            forwardModel?.contentRegex = null
+        }
+
+        if (template.isNotBlank()) {
+            forwardModel?.template = template
+        } else {
+            forwardModel?.template = null
         }
 
         runBlocking(Dispatchers.IO) {

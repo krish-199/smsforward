@@ -31,8 +31,8 @@ class RedirectionManager @Inject constructor(
         }
 
         Log.d(TAG, "SMS received from $phoneNumberFrom")
-        forwardModels.filter { dbForwardModel ->
-            if (dbForwardModel.isRegex) {
+        forwardModels.forEach { dbForwardModel ->
+            val matchesSource = if (dbForwardModel.isRegex) {
                 try {
                     Pattern.compile(dbForwardModel.from).matcher(phoneNumberFrom).matches()
                 } catch (e: PatternSyntaxException) {
@@ -45,18 +45,48 @@ class RedirectionManager @Inject constructor(
             } else {
                 dbForwardModel.from == phoneNumberFrom
             }
-        }.map {
-            Log.d(TAG, "Caught a SMS from $phoneNumberFrom that matches ${it.from}")
+
+            if (!matchesSource) return@forEach
+
+            var redirectedMessage = message
+            if (!dbForwardModel.contentRegex.isNullOrBlank()) {
+                try {
+                    val pattern = Pattern.compile(dbForwardModel.contentRegex!!)
+                    val matcher = pattern.matcher(message)
+                    if (matcher.find()) {
+                        if (!dbForwardModel.template.isNullOrBlank()) {
+                            val template = dbForwardModel.template!!
+                            val templateRegex = Regex("\\{(\\d+)\\}")
+                            redirectedMessage = templateRegex.replace(template) { result ->
+                                val groupIndex = result.groupValues[1].toInt()
+                                if (groupIndex <= matcher.groupCount()) {
+                                    matcher.group(groupIndex) ?: ""
+                                } else {
+                                    result.value
+                                }
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Message does not match content regex, skipping")
+                        return@forEach
+                    }
+                } catch (e: PatternSyntaxException) {
+                    Log.e(TAG, "Invalid content regex: ${dbForwardModel.contentRegex}")
+                    return@forEach
+                }
+            }
+
+            Log.d(TAG, "Caught a SMS from $phoneNumberFrom that matches ${dbForwardModel.from}")
             var source = phoneNumberFrom
-            if (it.vfromName.isNotBlank()) {
-                source = it.vfromName + " | " + phoneNumberFrom
+            if (dbForwardModel.vfromName.isNotBlank()) {
+                source = dbForwardModel.vfromName + " | " + phoneNumberFrom
             }
 
             sendSMS(
-                context, it.to, context.getString(
+                context, dbForwardModel.to, context.getString(
                     R.string.notification_info_sms_received_from,
                     source,
-                    message
+                    redirectedMessage
                 )
             )
         }
