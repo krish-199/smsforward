@@ -113,6 +113,7 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
         appCompatActivity.setSupportActionBar(ui.toolbar.toolbar)
         appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         ui.toolbar.ivHelp.isVisible = false
+        ui.toolbar.ivSettings.isVisible = false
     }
 
     private fun startRedirectList() {
