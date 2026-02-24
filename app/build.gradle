@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "com.pierreduchemin.smsforward"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 19
         versionName "1.7.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,24 +29,27 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
     namespace 'com.pierreduchemin.smsforward'
 }
 
 ext {
     roomVersion = '2.6.1'
-    archLifecycleVersion = '2.8.4'
+    archLifecycleVersion = '2.8.7'
     coreTestingVersion = '2.2.0'
-    coroutines = '1.8.1'
-    navVersion = '2.7.7'
+    coroutines = '1.9.0'
+    navVersion = '2.8.5'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.fragment:fragment-ktx:1.8.2"
-    implementation 'androidx.activity:activity-ktx:1.9.1'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation "androidx.fragment:fragment-ktx:1.8.5"
+    implementation 'androidx.activity:activity-ktx:1.9.3'
 
     // Room components
     implementation "androidx.room:room-runtime:$roomVersion"
