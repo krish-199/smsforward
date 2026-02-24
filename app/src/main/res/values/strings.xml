@@ -22,6 +22,11 @@
     <string name="addredirect_error_invalid_destination">Invalid destination</string>
     <string name="addredirect_error_invalid_regex">Invalid regex</string>
 
+    <string name="addredirect_info_content_regex">Content Regex (Optional)</string>
+    <string name="addredirect_info_content_regex_hint">e.g. Code is (\\d+)</string>
+    <string name="addredirect_info_template">Template (Optional)</string>
+    <string name="addredirect_info_template_hint">e.g. Your code is {1}</string>
+
     <string name="notification_info_sms_received_from">[%1$s]: %2$s</string>
     <string name="notification_info_sms_now_redirected">SMS are now being forwarded.</string>
 
