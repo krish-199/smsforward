@@ -10,10 +10,10 @@ import androidx.room.Delete
 @Dao
 interface ReplacementRuleDao {
 
-    @Query("SELECT * FROM ReplacementRule")
+    @Query("SELECT * FROM ReplacementRule ORDER BY id ASC")
     fun observeReplacementRules(): LiveData<List<ReplacementRule>>
 
-    @Query("SELECT * FROM ReplacementRule")
+    @Query("SELECT * FROM ReplacementRule ORDER BY id ASC")
     fun getReplacementRules(): List<ReplacementRule>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

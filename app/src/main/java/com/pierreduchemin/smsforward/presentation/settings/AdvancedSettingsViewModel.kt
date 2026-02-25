@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import com.pierreduchemin.smsforward.data.ReplacementRuleRepository
 import com.pierreduchemin.smsforward.data.source.database.GlobalModel
 import com.pierreduchemin.smsforward.data.source.database.ReplacementRule
@@ -24,15 +26,19 @@ class AdvancedSettingsViewModel @Inject constructor(
     val globalModel: LiveData<GlobalModel?> = globalModelRepository.observeGlobalModel()
     val replacementRules: LiveData<List<ReplacementRule>> = replacementRuleRepository.observeReplacementRules()
 
+    private val globalModelMutex = Mutex()
+
     private var prefixJob: Job? = null
     fun updatePrefix(prefix: String) {
         prefixJob?.cancel()
         prefixJob = viewModelScope.launch(Dispatchers.IO) {
             delay(500)
-            val current = globalModelRepository.getGlobalModel() ?: return@launch
-            if (current.prefix != prefix) {
-                current.prefix = prefix
-                globalModelRepository.updateGlobalModel(current)
+            globalModelMutex.withLock {
+                val current = globalModelRepository.getGlobalModel() ?: return@withLock
+                if (current.prefix != prefix) {
+                    current.prefix = prefix
+                    globalModelRepository.updateGlobalModel(current)
+                }
             }
         }
     }
@@ -42,10 +48,12 @@ class AdvancedSettingsViewModel @Inject constructor(
         suffixJob?.cancel()
         suffixJob = viewModelScope.launch(Dispatchers.IO) {
             delay(500)
-            val current = globalModelRepository.getGlobalModel() ?: return@launch
-            if (current.suffix != suffix) {
-                current.suffix = suffix
-                globalModelRepository.updateGlobalModel(current)
+            globalModelMutex.withLock {
+                val current = globalModelRepository.getGlobalModel() ?: return@withLock
+                if (current.suffix != suffix) {
+                    current.suffix = suffix
+                    globalModelRepository.updateGlobalModel(current)
+                }
             }
         }
     }
@@ -62,10 +70,17 @@ class AdvancedSettingsViewModel @Inject constructor(
         replacementJobs[rule.id] = viewModelScope.launch(Dispatchers.IO) {
             delay(500)
             replacementRuleRepository.insertReplacementRule(rule)
+        }.also { job ->
+            job.invokeOnCompletion {
+                if (replacementJobs[rule.id] == job) {
+                    replacementJobs.remove(rule.id)
+                }
+            }
         }
     }
 
     fun deleteReplacementRule(rule: ReplacementRule) {
+        replacementJobs.remove(rule.id)?.cancel()
         viewModelScope.launch(Dispatchers.IO) {
             replacementRuleRepository.deleteReplacementRule(rule)
         }

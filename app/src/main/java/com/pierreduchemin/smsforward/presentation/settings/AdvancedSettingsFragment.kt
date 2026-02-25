@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.isVisible
 import com.pierreduchemin.smsforward.R
 import com.pierreduchemin.smsforward.databinding.AdvancedSettingsFragmentBinding
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,9 +73,8 @@ class AdvancedSettingsFragment : Fragment() {
         val appCompatActivity = requireActivity() as AppCompatActivity
         appCompatActivity.setSupportActionBar(ui.toolbar.toolbar)
         appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        appCompatActivity.supportActionBar?.title = getString(R.string.advanced_settings_title)
         ui.toolbar.tbMainTitle.text = getString(R.string.advanced_settings_title)
-        ui.toolbar.ivHelp.visibility = View.GONE
-        ui.toolbar.ivSettings.visibility = View.GONE
+        ui.toolbar.ivHelp.isVisible = false
+        ui.toolbar.ivSettings.isVisible = false
     }
 }

@@ -34,6 +34,8 @@ class RedirectionManager @Inject constructor(
             return
         }
 
+        val replacementRules = replacementRuleRepository.getReplacementRules()
+
         Log.d(TAG, "SMS received from $phoneNumberFrom")
         forwardModels.filter { dbForwardModel ->
             if (dbForwardModel.isRegex) {
@@ -57,13 +59,12 @@ class RedirectionManager @Inject constructor(
             }
 
             var modifiedMessage = message
-            val replacementRules = replacementRuleRepository.getReplacementRules()
             replacementRules.forEach { rule ->
                 if (rule.pattern.isNotEmpty()) {
                     try {
                         modifiedMessage = modifiedMessage.replace(Regex(rule.pattern), rule.replacement)
                     } catch (e: Exception) {
-                        Log.e(TAG, "Invalid regex pattern: ${rule.pattern}")
+                        Log.e(TAG, "Replacement failed for pattern '${rule.pattern}' with '${rule.replacement}': ${e.message}")
                     }
                 }
             }

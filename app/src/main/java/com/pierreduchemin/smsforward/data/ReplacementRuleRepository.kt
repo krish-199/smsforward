@@ -11,8 +11,8 @@ class ReplacementRuleRepository(private val replacementRuleDao: ReplacementRuleD
     override fun getReplacementRules() =
         replacementRuleDao.getReplacementRules()
 
-    override fun insertReplacementRule(replacementRule: ReplacementRule) {
-        replacementRuleDao.insertReplacementRule(replacementRule)
+    override fun insertReplacementRule(replacementRule: ReplacementRule): Long {
+        return replacementRuleDao.insertReplacementRule(replacementRule)
     }
 
     override fun deleteReplacementRule(replacementRule: ReplacementRule) {

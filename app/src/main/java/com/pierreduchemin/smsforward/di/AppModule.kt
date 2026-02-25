@@ -55,12 +55,11 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRedirectionManager(@ApplicationContext appContext: Context) =
-        RedirectionManager(
-            provideGlobalModelRepository(appContext),
-            provideForwardModelRepository(appContext),
-            provideReplacementRuleRepository(appContext)
-        )
+    fun provideRedirectionManager(
+        globalModelRepository: GlobalModelRepository,
+        forwardModelRepository: ForwardModelRepository,
+        replacementRuleRepository: ReplacementRuleRepository
+    ) = RedirectionManager(globalModelRepository, forwardModelRepository, replacementRuleRepository)
 
     @Provides
     @Singleton
