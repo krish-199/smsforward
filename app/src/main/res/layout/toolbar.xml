@@ -7,11 +7,11 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="@android:color/white"
+        android:titleTextColor="?attr/colorOnPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/ToolBarStyle"
-        app:titleTextColor="@android:color/white"
+        app:titleTextColor="?attr/colorOnPrimary"
         tools:targetApi="m">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:text="@string/app_name"
-                android:textColor="@android:color/white"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

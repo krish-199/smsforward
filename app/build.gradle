@@ -25,10 +25,6 @@ android {
         viewBinding true
         buildConfig true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
-    }
     namespace 'com.pierreduchemin.smsforward'
 }
 
@@ -60,7 +56,6 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
 
