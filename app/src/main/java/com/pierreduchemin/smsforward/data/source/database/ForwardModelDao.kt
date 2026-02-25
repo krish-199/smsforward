@@ -30,4 +30,10 @@ interface ForwardModelDao {
 
     @Query("DELETE FROM ForwardModel WHERE id = :id")
     fun deleteForwardModelById(id: Long): Int
+
+    @Query("UPDATE ForwardModel SET forwardCount = 0")
+    fun resetForwardCount()
+
+    @Query("UPDATE ForwardModel SET forwardCount = forwardCount + 1 WHERE id = :id")
+    fun incrementForwardCount(id: Long)
 }

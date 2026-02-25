@@ -28,6 +28,10 @@ class ForwardModelAdapter(
         val item = values[position]
         holder.tvFrom.text = item.vfrom
         holder.tvTo.text = item.vto
+        holder.tvRuleCount.text = holder.itemView.context.getString(
+            com.pierreduchemin.smsforward.R.string.redirectlist_rule_forwarded,
+            item.forwardCount
+        )
 
         with(holder.ivDelete) {
             tag = item
@@ -49,6 +53,7 @@ class ForwardModelAdapter(
         val tvFrom: TextView = ui.tvFrom
         val tvTo: TextView = ui.tvTo
         val ivDelete: ImageView = ui.ivDelete
+        val tvRuleCount: TextView = ui.tvRuleCount
 
         override fun toString(): String {
             return super.toString() + " '" + tvTo.text + "'"
@@ -65,14 +70,10 @@ class ForwardModelAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].id === newList[newItemPosition].id
+            oldList[oldItemPosition].id == newList[newItemPosition].id
 
-        override fun areContentsTheSame(oldPosition: Int, newPosition: Int): Boolean {
-            val (_, value, name) = oldList[oldPosition]
-            val (_, value1, name1) = newList[newPosition]
-
-            return name == name1 && value == value1
-        }
+        override fun areContentsTheSame(oldPosition: Int, newPosition: Int): Boolean =
+            oldList[oldPosition] == newList[newPosition]
 
         @Nullable
         override fun getChangePayload(oldPosition: Int, newPosition: Int): Any? =

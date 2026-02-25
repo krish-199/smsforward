@@ -23,4 +23,12 @@ class ForwardModelRepository(private val forwardModelDao: ForwardModelDao) :
         forwardModelDao.insertForwardModel(forwardModel)
 
     override fun deleteForwardModelById(id: Long): Int = forwardModelDao.deleteForwardModelById(id)
+
+    override fun resetForwardCount() {
+        forwardModelDao.resetForwardCount()
+    }
+
+    override fun incrementForwardCount(id: Long) {
+        forwardModelDao.incrementForwardCount(id)
+    }
 }

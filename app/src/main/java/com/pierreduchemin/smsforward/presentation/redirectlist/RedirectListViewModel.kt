@@ -28,11 +28,23 @@ class RedirectListViewModel @Inject constructor(
 
     val ldForwardsList = MutableLiveData<List<ForwardModel>>()
     val ldButtonState = MutableLiveData<RedirectListFragment.SwitchState>()
+    val ldGlobalModel = globalModelRepository.observeGlobalModel()
 
     private var forwardModels: List<ForwardModel> = arrayListOf()
     private var globalModel: GlobalModel? = null
 
     private val smsReceiver = SmsReceiver()
+
+    private val globalModelObserver = androidx.lifecycle.Observer<GlobalModel?> {
+        if (it == null || !it.activated) {
+            NotificationUtils.cancel(application)
+            smsReceiver.unregisterSmsReceiver(application)
+        } else {
+            NotificationUtils.notify(application)
+            smsReceiver.registerSmsReceiver(application)
+        }
+        globalModel = it
+    }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,16 +56,7 @@ class RedirectListViewModel @Inject constructor(
             }
         }
 
-        globalModelRepository.observeGlobalModel().observeForever {
-            if (it == null || !it.activated) {
-                NotificationUtils.cancel(application)
-                smsReceiver.unregisterSmsReceiver(application)
-            } else {
-                NotificationUtils.notify(application)
-                smsReceiver.registerSmsReceiver(application)
-            }
-            globalModel = it
-        }
+        ldGlobalModel.observeForever(globalModelObserver)
         forwardModelRepository.observeForwardModels().observeForever {
             forwardModels = it
             notifyUpdate()
@@ -67,6 +70,8 @@ class RedirectListViewModel @Inject constructor(
             ldButtonState.value = RedirectListFragment.SwitchState.Stopped
             viewModelScope.launch(Dispatchers.IO) {
                 globalModelRepository.updateGlobalModel(localGlobalModel)
+                globalModelRepository.resetForwardCount()
+                forwardModelRepository.resetForwardCount()
             }
         } else {
             localGlobalModel.activated = true
@@ -116,5 +121,10 @@ class RedirectListViewModel @Inject constructor(
 
             forwardModelRepository.deleteForwardModelById(id)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        ldGlobalModel.removeObserver(globalModelObserver)
     }
 }

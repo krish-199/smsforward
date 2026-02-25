@@ -80,31 +80,6 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
             askPermission(requiredPermissions)
         } ?: Log.e(TAG, "Not able to ask for permission") // TODO: manage error with error view
 
-        viewModel.buttonState.observe(requireActivity()) {
-            setButtonState(it)
-        }
-        viewModel.errorMessageRes.observe(requireActivity()) {
-            showError(it)
-        }
-        viewModel.sourceText.observe(requireActivity()) {
-            setSource(it)
-        }
-        viewModel.destinationText.observe(requireActivity()) {
-            setDestination(it)
-        }
-        viewModel.isComplete.observe(requireActivity()) {
-            if (it) {
-                startRedirectList()
-            }
-        }
-        viewModel.isAdvancedModeEnabled.observe(requireActivity()) {
-            if (it) {
-                setAdvancedMode()
-            } else {
-                setNormalMode()
-            }
-        }
-
         return ui.root
     }
 
@@ -121,6 +96,31 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.buttonState.observe(viewLifecycleOwner) {
+            setButtonState(it)
+        }
+        viewModel.errorMessageRes.observe(viewLifecycleOwner) {
+            showError(it)
+        }
+        viewModel.sourceText.observe(viewLifecycleOwner) {
+            setSource(it)
+        }
+        viewModel.destinationText.observe(viewLifecycleOwner) {
+            setDestination(it)
+        }
+        viewModel.isComplete.observe(viewLifecycleOwner) {
+            if (it) {
+                startRedirectList()
+            }
+        }
+        viewModel.isAdvancedModeEnabled.observe(viewLifecycleOwner) {
+            if (it) {
+                setAdvancedMode()
+            } else {
+                setNormalMode()
+            }
+        }
 
         ui.etSource.setOnClickListener {
             registerForNumberPicker.launch()
