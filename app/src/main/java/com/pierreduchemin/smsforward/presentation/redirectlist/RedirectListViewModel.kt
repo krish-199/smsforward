@@ -35,6 +35,17 @@ class RedirectListViewModel @Inject constructor(
 
     private val smsReceiver = SmsReceiver()
 
+    private val globalModelObserver = androidx.lifecycle.Observer<GlobalModel?> {
+        if (it == null || !it.activated) {
+            NotificationUtils.cancel(application)
+            smsReceiver.unregisterSmsReceiver(application)
+        } else {
+            NotificationUtils.notify(application)
+            smsReceiver.registerSmsReceiver(application)
+        }
+        globalModel = it
+    }
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             forwardModels = forwardModelRepository.getForwardModels()
@@ -45,16 +56,7 @@ class RedirectListViewModel @Inject constructor(
             }
         }
 
-        globalModelRepository.observeGlobalModel().observeForever {
-            if (it == null || !it.activated) {
-                NotificationUtils.cancel(application)
-                smsReceiver.unregisterSmsReceiver(application)
-            } else {
-                NotificationUtils.notify(application)
-                smsReceiver.registerSmsReceiver(application)
-            }
-            globalModel = it
-        }
+        ldGlobalModel.observeForever(globalModelObserver)
         forwardModelRepository.observeForwardModels().observeForever {
             forwardModels = it
             notifyUpdate()
@@ -119,5 +121,10 @@ class RedirectListViewModel @Inject constructor(
 
             forwardModelRepository.deleteForwardModelById(id)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        ldGlobalModel.removeObserver(globalModelObserver)
     }
 }

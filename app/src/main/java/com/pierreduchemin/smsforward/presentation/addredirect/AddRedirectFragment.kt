@@ -80,6 +80,23 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
             askPermission(requiredPermissions)
         } ?: Log.e(TAG, "Not able to ask for permission") // TODO: manage error with error view
 
+        return ui.root
+    }
+
+    private fun setupToolbar() {
+        val appCompatActivity = requireActivity() as AppCompatActivity
+        appCompatActivity.setSupportActionBar(ui.toolbar.toolbar)
+        appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ui.toolbar.ivHelp.isVisible = false
+    }
+
+    private fun startRedirectList() {
+        findNavController().navigate(R.id.action_addRedirectFragment_pop)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel.buttonState.observe(viewLifecycleOwner) {
             setButtonState(it)
         }
@@ -104,23 +121,6 @@ class AddRedirectFragment : Fragment(), AddRedirectSubscriber {
                 setNormalMode()
             }
         }
-
-        return ui.root
-    }
-
-    private fun setupToolbar() {
-        val appCompatActivity = requireActivity() as AppCompatActivity
-        appCompatActivity.setSupportActionBar(ui.toolbar.toolbar)
-        appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        ui.toolbar.ivHelp.isVisible = false
-    }
-
-    private fun startRedirectList() {
-        findNavController().navigate(R.id.action_addRedirectFragment_pop)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         ui.etSource.setOnClickListener {
             registerForNumberPicker.launch()

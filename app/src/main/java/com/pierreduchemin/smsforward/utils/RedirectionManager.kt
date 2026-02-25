@@ -5,6 +5,7 @@ import android.util.Log
 import com.pierreduchemin.smsforward.R
 import com.pierreduchemin.smsforward.data.ForwardModelRepository
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +19,10 @@ class RedirectionManager @Inject constructor(
     private val forwardModelRepository: ForwardModelRepository
 ) {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.e(TAG, "Coroutine failed", throwable)
+    }
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + exceptionHandler)
 
     companion object {
         private val TAG by lazy { RedirectionManager::class.java.simpleName }
@@ -51,7 +55,7 @@ class RedirectionManager @Inject constructor(
             } else {
                 dbForwardModel.from == phoneNumberFrom
             }
-        }.map {
+        }.forEach {
             Log.d(TAG, "Caught a SMS from $phoneNumberFrom that matches ${it.from}")
             var source = phoneNumberFrom
             if (it.vfromName.isNotBlank()) {
@@ -67,10 +71,15 @@ class RedirectionManager @Inject constructor(
             )
 
             scope.launch {
-                it.id?.let { id ->
-                    forwardModelRepository.incrementForwardCount(id)
+                try {
+                    it.id?.let { id ->
+                        forwardModelRepository.incrementForwardCount(id)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to increment per-rule count", e)
+                } finally {
+                    globalModelRepository.incrementForwardCount()
                 }
-                globalModelRepository.incrementForwardCount()
             }
         }
     }

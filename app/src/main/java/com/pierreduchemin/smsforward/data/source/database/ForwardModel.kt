@@ -28,6 +28,6 @@ data class ForwardModel(
     @ColumnInfo
     var isRegex: Boolean = false,
 
-    @ColumnInfo
+    @ColumnInfo(defaultValue = "0")
     var forwardCount: Int = 0,
 )
