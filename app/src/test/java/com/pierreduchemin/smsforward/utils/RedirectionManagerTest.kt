@@ -60,4 +60,15 @@ class RedirectionManagerTest {
 
         verify(forwardModelRepository, never()).getForwardModels()
     }
+
+    @Test
+    fun `onSmsReceived should handle blacklist with empty entries`() {
+        val globalModel = GlobalModel(1, activated = true, blacklist = "spam, , , promo")
+        whenever(globalModelRepository.getGlobalModel()).thenReturn(globalModel)
+        whenever(forwardModelRepository.getForwardModels()).thenReturn(emptyList())
+
+        redirectionManager.onSmsReceived(context, "123", "hello")
+
+        verify(forwardModelRepository, times(1)).getForwardModels()
+    }
 }
