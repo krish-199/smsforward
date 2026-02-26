@@ -64,7 +64,7 @@ class AdvancedSettingsViewModel @Inject constructor(
         }
     }
 
-    private val replacementJobs = mutableMapOf<Long, Job>()
+    private val replacementJobs = java.util.concurrent.ConcurrentHashMap<Long, Job>()
     fun updateReplacementRule(rule: ReplacementRule) {
         replacementJobs[rule.id]?.cancel()
         replacementJobs[rule.id] = viewModelScope.launch(Dispatchers.IO) {
