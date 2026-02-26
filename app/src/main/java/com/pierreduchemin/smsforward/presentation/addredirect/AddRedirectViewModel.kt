@@ -107,7 +107,7 @@ class AddRedirectViewModel @Inject constructor() : ViewModel() {
         val advancedMode = globalModel?.advancedMode ?: false
         if (advancedMode) {
             try {
-                Pattern.compile(source)
+                Pattern.compile(source, Pattern.CASE_INSENSITIVE)
             } catch (e: PatternSyntaxException) {
                 errorMessageRes.value = R.string.addredirect_error_invalid_regex
                 return

@@ -34,7 +34,8 @@ class RedirectionManager @Inject constructor(
         forwardModels.filter { dbForwardModel ->
             if (dbForwardModel.isRegex) {
                 try {
-                    Pattern.compile(dbForwardModel.from).matcher(phoneNumberFrom).matches()
+                    Pattern.compile(dbForwardModel.from, Pattern.CASE_INSENSITIVE)
+                        .matcher(phoneNumberFrom).find()
                 } catch (e: PatternSyntaxException) {
                     Log.e(
                         TAG,
