@@ -50,5 +50,12 @@
     <string name="description_send_sms_illustration">Send SMS</string>
     <string name="description_add_redirection_button">Add a redirection button</string>
     <string name="description_help_button">Help button</string>
+    <string name="description_blacklist_button">Blacklist button</string>
+
+    <string name="blacklist_title">Global Blacklist</string>
+    <string name="blacklist_info_description">Messages containing any of these words or regex (comma-separated) will not be forwarded.</string>
+    <string name="blacklist_hint">e.g. spam, promo, [0-9]{3}</string>
+    <string name="blacklist_save">Save</string>
+    <string name="blacklist_info_saved">Blacklist updated</string>
 
 </resources>

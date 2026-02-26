@@ -2,6 +2,8 @@ package com.pierreduchemin.smsforward.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pierreduchemin.smsforward.data.ForwardModelRepository
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
 import com.pierreduchemin.smsforward.data.source.database.SMSForwardDatabase
@@ -20,6 +22,12 @@ class AppModule {
 
     private lateinit var smsForwardDatabase: SMSForwardDatabase
 
+    private val MIGRATION_4_5 = object : Migration(4, 5) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE GlobalModel ADD COLUMN blacklist TEXT NOT NULL DEFAULT ''")
+        }
+    }
+
     @Singleton
     @Provides
     fun provideSmsForwardDatabase(@ApplicationContext appContext: Context): SMSForwardDatabase {
@@ -29,6 +37,7 @@ class AppModule {
                 SMSForwardDatabase::class.java,
                 "smsforward_database"
             )
+                .addMigrations(MIGRATION_4_5)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build()
