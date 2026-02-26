@@ -65,7 +65,7 @@ class ForwardModelAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].id === newList[newItemPosition].id
+            oldList[oldItemPosition].id == newList[newItemPosition].id
 
         override fun areContentsTheSame(oldPosition: Int, newPosition: Int): Boolean {
             val (_, value, name) = oldList[oldPosition]

@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -47,6 +50,12 @@ class RedirectListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        ViewCompat.setOnApplyWindowInsetsListener(ui.root) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = insets.top, bottom = insets.bottom, left = insets.left, right = insets.right)
+            windowInsets
+        }
 
         ui.vfContent.rvForwards.layoutManager = LinearLayoutManager(requireContext())
         ui.vfContent.rvForwards.adapter = ForwardModelAdapter { v ->
@@ -102,27 +111,29 @@ class RedirectListFragment : Fragment() {
             SwitchState.Enabled -> {
                 ui.vfContent.swActivate.isEnabled = true
                 ui.vfContent.swActivate.isChecked = true
-                ui.vfContent.tvActivationMessage.text =
-                    getString(R.string.redirectlist_redirection_activated)
+                val message = getString(R.string.redirectlist_redirection_activated)
+                ui.vfContent.tvActivationMessage.text = message
                 ui.vfContent.tvActivationMessage.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.activatedGreen
                     )
                 )
+                ViewCompat.setStateDescription(ui.vfContent.swActivate, message)
             }
 
             SwitchState.Stopped -> {
                 ui.vfContent.swActivate.isEnabled = true
                 ui.vfContent.swActivate.isChecked = false
-                ui.vfContent.tvActivationMessage.text =
-                    getString(R.string.redirectlist_redirection_deactivated)
+                val message = getString(R.string.redirectlist_redirection_deactivated)
+                ui.vfContent.tvActivationMessage.text = message
                 ui.vfContent.tvActivationMessage.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.deactivatedRed
                     )
                 )
+                ViewCompat.setStateDescription(ui.vfContent.swActivate, message)
             }
         }
     }

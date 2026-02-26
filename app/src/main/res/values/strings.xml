@@ -8,6 +8,7 @@
     <string name="redirectlist_empty_redirection_list">Empty redirection list</string>
     <string name="redirectlist_redirection_deactivated">Redirection deactivated</string>
     <string name="redirectlist_redirection_activated">Redirection activated</string>
+    <string name="redirectlist_redirection_toggle_label">Toggle redirection</string>
 
     <string name="addredirect_info_automatically_redirect_sms_from">Automatically redirect SMS from</string>
     <string name="addredirect_info_to">to</string>
