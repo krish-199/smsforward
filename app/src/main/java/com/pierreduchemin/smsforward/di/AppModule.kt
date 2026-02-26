@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.pierreduchemin.smsforward.data.ForwardModelRepository
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
+import com.pierreduchemin.smsforward.data.ReplacementRuleRepository
 import com.pierreduchemin.smsforward.data.source.database.SMSForwardDatabase
 import com.pierreduchemin.smsforward.utils.RedirectionManager
 import dagger.Module
@@ -30,6 +31,7 @@ class AppModule {
                 "smsforward_database"
             )
                 .allowMainThreadQueries()
+                .addMigrations(SMSForwardDatabase.MIGRATION_4_5)
                 .fallbackToDestructiveMigration()
                 .build()
         }
@@ -48,8 +50,16 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRedirectionManager(@ApplicationContext appContext: Context) =
-        RedirectionManager(provideGlobalModelRepository(appContext), provideForwardModelRepository(appContext))
+    fun provideReplacementRuleRepository(@ApplicationContext appContext: Context) =
+        ReplacementRuleRepository(provideSmsForwardDatabase(appContext).replacementRuleDao())
+
+    @Provides
+    @Singleton
+    fun provideRedirectionManager(
+        globalModelRepository: GlobalModelRepository,
+        forwardModelRepository: ForwardModelRepository,
+        replacementRuleRepository: ReplacementRuleRepository
+    ) = RedirectionManager(globalModelRepository, forwardModelRepository, replacementRuleRepository)
 
     @Provides
     @Singleton

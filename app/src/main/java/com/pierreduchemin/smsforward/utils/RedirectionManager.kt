@@ -5,13 +5,16 @@ import android.util.Log
 import com.pierreduchemin.smsforward.R
 import com.pierreduchemin.smsforward.data.ForwardModelRepository
 import com.pierreduchemin.smsforward.data.GlobalModelRepository
+import com.pierreduchemin.smsforward.data.ReplacementRuleRepository
+import com.pierreduchemin.smsforward.data.source.database.GlobalModel
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import javax.inject.Inject
 
 class RedirectionManager @Inject constructor(
     private val globalModelRepository: GlobalModelRepository,
-    private val forwardModelRepository: ForwardModelRepository
+    private val forwardModelRepository: ForwardModelRepository,
+    private val replacementRuleRepository: ReplacementRuleRepository
 ) {
 
     companion object {
@@ -19,7 +22,8 @@ class RedirectionManager @Inject constructor(
     }
 
     fun onSmsReceived(context: Context, phoneNumberFrom: String, message: String) {
-        if (!isRedirectionActivated()) {
+        val globalModel = globalModelRepository.getGlobalModel()
+        if (!isRedirectionActivated(globalModel)) {
             Log.i(TAG, "Redirection not activated")
             return
         }
@@ -29,6 +33,8 @@ class RedirectionManager @Inject constructor(
             Log.i(TAG, "Nothing to redirect")
             return
         }
+
+        val replacementRules = replacementRuleRepository.getReplacementRules()
 
         Log.d(TAG, "SMS received from $phoneNumberFrom")
         forwardModels.filter { dbForwardModel ->
@@ -52,18 +58,31 @@ class RedirectionManager @Inject constructor(
                 source = it.vfromName + " | " + phoneNumberFrom
             }
 
+            var modifiedMessage = message
+            replacementRules.forEach { rule ->
+                if (rule.pattern.isNotEmpty()) {
+                    try {
+                        modifiedMessage = modifiedMessage.replace(Regex(rule.pattern), rule.replacement)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Replacement failed for pattern '${rule.pattern}' with '${rule.replacement}': ${e.message}")
+                    }
+                }
+            }
+            if (globalModel != null) {
+                modifiedMessage = globalModel.prefix + modifiedMessage + globalModel.suffix
+            }
+
             sendSMS(
                 context, it.to, context.getString(
                     R.string.notification_info_sms_received_from,
                     source,
-                    message
+                    modifiedMessage
                 )
             )
         }
     }
 
-    fun isRedirectionActivated(): Boolean {
-        val globalModel = globalModelRepository.getGlobalModel()
+    fun isRedirectionActivated(globalModel: GlobalModel? = globalModelRepository.getGlobalModel()): Boolean {
         if (globalModel == null) {
             Log.d(TAG, "globalModel is null")
             return true

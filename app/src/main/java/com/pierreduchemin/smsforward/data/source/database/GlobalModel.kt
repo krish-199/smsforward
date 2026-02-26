@@ -15,4 +15,10 @@ data class GlobalModel(
 
     @ColumnInfo
     var advancedMode: Boolean = false,
+
+    @ColumnInfo
+    var prefix: String = "",
+
+    @ColumnInfo
+    var suffix: String = "",
 )

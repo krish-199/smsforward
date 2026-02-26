@@ -50,5 +50,14 @@
     <string name="description_send_sms_illustration">Send SMS</string>
     <string name="description_add_redirection_button">Add a redirection button</string>
     <string name="description_help_button">Help button</string>
+    <string name="description_settings_button">Settings button</string>
+
+    <string name="advanced_settings_title">Advanced Settings</string>
+    <string name="advanced_settings_prefix_label">Prefix</string>
+    <string name="advanced_settings_suffix_label">Suffix</string>
+    <string name="advanced_settings_replacements_title">Text Replacements (Regex)</string>
+    <string name="advanced_settings_add_replacement">Add Replacement</string>
+    <string name="advanced_settings_pattern_hint">Pattern (Regex)</string>
+    <string name="advanced_settings_replacement_hint">Replacement</string>
 
 </resources>
