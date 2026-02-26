@@ -3,6 +3,7 @@ package com.pierreduchemin.smsforward
 import org.junit.Test
 import java.util.regex.Pattern
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 
 class RegexTest {
     @Test
@@ -10,8 +11,8 @@ class RegexTest {
         val regex = "AXISBk"
         val source = "CM-AXISBk"
 
-        // Behavior after change: use find() and CASE_INSENSITIVE
-        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
+        // Behavior after change: use find() and CASE_INSENSITIVE | UNICODE_CASE
+        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
         val matcher = pattern.matcher(source)
 
         assertTrue("Should find AXISBk in CM-AXISBk", matcher.find())
@@ -21,7 +22,7 @@ class RegexTest {
     fun testCaseInsensitive() {
         val regex = "axisbk"
         val source = "CM-AXISBk"
-        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
+        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
         val matcher = pattern.matcher(source)
 
         assertTrue("Should find axisbk in CM-AXISBk case-insensitively", matcher.find())
@@ -31,9 +32,16 @@ class RegexTest {
     fun testExactMatchStillWorks() {
         val regex = "^CM-AXISBk$"
         val source = "CM-AXISBk"
-        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
-        val matcher = pattern.matcher(source)
+        val nonExactSource = "X-CM-AXISBk-Y"
+        val pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
 
+        val matcher = pattern.matcher(source)
         assertTrue("Should match exactly if anchors are used", matcher.find())
+
+        val nonExactMatcher = pattern.matcher(nonExactSource)
+        assertFalse(
+            "Anchored regex should reject non-exact source",
+            nonExactMatcher.find()
+        )
     }
 }
